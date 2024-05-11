@@ -202,7 +202,8 @@ struct UsersData
 }UserData;
 
 
-void LoginToAccount() {
+void LoginToAccount()
+{
     string LoginPassword;
     string LoginUsername;
        
@@ -214,38 +215,36 @@ void LoginToAccount() {
     cout << "Please Enter Your Password" << endl;
     cin >> LoginPassword;
 
-    // Encode the input password
     vector<int> LoginCodedPassword = encrypt(LoginPassword);
-    cout << "Encoded Password: " << LoginCodedPassword << endl;
-
+    cout << LoginCodedPassword << endl;
+    
     ifstream b2("BankUsersFiles.txt"); 
 
-    bool loginSuccessful = false;
-    while (getline(b2, UserData.Username)) {
-        vector<int> codedPassword;
-        if (!(b2 >> codedPassword)) {
-            // Error reading password
-            break;
+    string userDataUsername;
+    string userDataCodedPasswordLine;
+    while (getline(b2, userDataUsername) && getline(b2, userDataCodedPasswordLine)) {
+        if (userDataUsername == LoginUsername) {
+            vector<int> userDataCodedPassword;
+            istringstream passwordStream(userDataCodedPasswordLine);
+            int num;
+            while (passwordStream >> num) {
+                userDataCodedPassword.push_back(num);
+            }
+
+            // Check if the passwords match
+            if (userDataCodedPassword == LoginCodedPassword) {
+                MainApplication();
+                return;
+            } else {
+                cout << "Incorrect Password" << endl;
+                return; // Exit the function if the password is incorrect
+            }
         }
-
-        cout << "File Username: " << UserData.Username << endl;
-        cout << "File Password: " << codedPassword << endl;
-
-        if (LoginUsername == UserData.Username && codedPassword == LoginCodedPassword) {
-            // Username and password match
-            loginSuccessful = true;
-            break;
-        }
-
-        // Skip the rest of the line
-        skipLine(b2);
     }
 
-    if (loginSuccessful) {
-        MainApplication();
-    } else {
-        cout << "Incorrect login Information!" << endl;
-    }
+    // If the username is not found
+    cout << "Username not found" << endl;
+    b2.close();
 }
 
 void CreateUserAccount()
@@ -269,11 +268,10 @@ void CreateUserAccount()
 
     UserData.codedPassword = encrypt(UserData.Password);
     UserData.Password = "";
-
-    cout << "Please Enter Your Current Adress: " << endl;
+    cout << "Please Enter Your Current Adress (For Any Spaces Use A Dash): " << endl;
     cin >> UserData.Adress;
 
-    cout << "Please Enter Your SSN" << endl;
+    cout << "Please Enter Your SSN: " << endl;
     cin >> UserData.SSN;
 
     UserData.codedSSN = encrypt(UserData.SSN);
