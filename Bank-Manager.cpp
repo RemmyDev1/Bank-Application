@@ -1,9 +1,11 @@
+#include <stdlib.h> 
 #include <iostream>
 #include <fstream>
 #include <string>
+
 using namespace std;
 
-int EncryptData(string SSN)
+string EncryptData(string SSN)
 {
     char key = 'K'; //Any char will work
     string output = SSN;
@@ -25,7 +27,7 @@ struct UsersData
     string LoginPassword = "";
     string Fname = "";
     string Lname = "";
-    string SSN = 0;
+    string SSN = "0";
 
     //SA = Savigs account!
     bool SA = false;
@@ -107,13 +109,11 @@ void CreateUserAccount()
             if (VerifyPassTemp == UserData.LoginPassword)
             {
                 cout << "Please Enter Your Current Adress: " << endl;
-                cin >> UserData.Adress >> endl;
+                cin >> UserData.Adress;
                 cout << "Please Enter Your SSN" << endl;
-                cin >> UserData.SSN >> endl;
+                cin >> UserData.SSN;
                 UserData.SSN = EncryptData(UserData.SSN);
-                cout << UserData.SSN << endl;
-                UserData.SSN = EncryptData(UserData.SSN);
-                cout << UserData.SSN << endl;
+              	system("cls");
             }
             else
             {
