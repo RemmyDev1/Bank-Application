@@ -3,10 +3,15 @@
 #include <string>
 using namespace std;
 
-int EncryptData(SSN)
+int EncryptData(string SSN)
 {
-
-  return EncryptedSSN
+    char key = 'K'; //Any char will work
+    string output = SSN;
+    
+    for (int i = 0; i < SSN.size(); i++)
+        output[i] = SSN[i] ^ key;
+    
+    return output;
 }
 
 struct UsersData
@@ -20,7 +25,7 @@ struct UsersData
     string LoginPassword = "";
     string Fname = "";
     string Lname = "";
-    int SSN = 0;
+    string SSN = 0;
 
     //SA = Savigs account!
     bool SA = false;
@@ -106,6 +111,9 @@ void CreateUserAccount()
                 cout << "Please Enter Your SSN" << endl;
                 cin >> UserData.SSN >> endl;
                 UserData.SSN = EncryptData(UserData.SSN);
+                cout << UserData.SSN << endl;
+                UserData.SSN = EncryptData(UserData.SSN);
+                cout << UserData.SSN << endl;
             }
             else
             {
