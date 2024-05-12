@@ -228,19 +228,18 @@ void CreateUserAccount()
         UserData.UA = true;
     }
     
-    cout << "Do you want this account to be a savings accout? (true or false): " << endl;
+    cout << "Do you want this account to be a savings accout? (0 for true or 1 for false): " << endl;
     cin >> UserData.SA;
     if(UserData.age < 18 && UserData.SA == true)
     {
         UserData.USA = true;
         UserData.UA = false;
-        UserData.SA = false;
     }
     
-    cout << "Do you want this to be a Business Account (true or false): " << endl;
+    cout << "Do you want this to be a Business Account (0 for true or 1 for false): " << endl;
     cin >> UserData.BA;
     
-    cout << "Do you want this to be a Normal Bank Account (true or false): " << endl;
+    cout << "Do you want this to be a Normal Bank Account (0 for true or 1 for false): " << endl;
     cin >> UserData.NBA;
     
     if(UserData.SA == true && UserData.IsMinority == true)
@@ -309,4 +308,4 @@ int main()
 
     loadKeys();
     Menu();
-}
+}   
