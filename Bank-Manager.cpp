@@ -214,25 +214,35 @@ void LoginToAccount()
 
     cout << "Please Enter Your Password" << endl;
     cin >> LoginPassword;
-
+    
     vector<int> LoginCodedPassword = encrypt(LoginPassword);
-
+    cout << LoginCodedPassword << endl;
     ifstream b2("BankUsersFiles.txt"); 
 
-    cout << UserData.codedPassword << endl;
-    if ((LoginUsername == UserData.Username) &&
-        (LoginCodedPassword == UserData.codedPassword))
-    {
-        MainApplication();
-        return;
+    string userDataUsername;
+    string userDataCodedPasswordLine;
+    while (getline(b2, userDataUsername) && getline(b2, userDataCodedPasswordLine)) {
+        if (userDataUsername == LoginUsername) {
+            vector<int> userDataCodedPassword;
+            istringstream passwordStream(userDataCodedPasswordLine);
+            int num;
+            while (passwordStream >> num) {
+                userDataCodedPassword.push_back(num);
+            }
+
+            // Check if the passwords match
+            if (userDataCodedPassword == LoginCodedPassword) {
+                MainApplication();
+                return;
+            } else {
+                cout << "Incorrect Password" << endl;
+                return; // Exit the function if the password is incorrect
+            }
+        }
     }
 
-    skipLine(b2); // the rest of the password line
-    skipLine(b2); // the address line
-    skipLine(b2); // the ssn line
-    
-
-    cout << "Incorrect Login" << endl;
+    // If the username is not found
+    cout << "Username not found" << endl;
 }
 
 void CreateUserAccount()
@@ -311,3 +321,6 @@ int main()
     loadKeys();
     Menu();
 }
+
+
+
