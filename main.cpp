@@ -261,15 +261,15 @@ void CreateUserAccount()
     
     ofstream b1("BankUsersFiles.txt", ios::app);
     b1 << UserData.Username << '\n'
-       << UserData.codedPassword << '\n'
-       << "Home Adress: " + UserData.Adress << '\n'
-       << "Phone number: " + UserData.PhoneNum << '\n'
-       << "Income Per Year: " + UserData.IncomePerYear << '\n'
-       << "age: " + UserData.age << '\n'
-       << "Savings account: " + UserData.SA << '\n'
-       << "Underadged Savings Account: " + UserData.USA << '\n'
-       << "Business Account: " + UserData.BA << '\n'
-       << "Normal Bank Account: " + UserData.NBA << '\n';
+   << UserData.codedPassword[0] << ' ' << UserData.codedPassword[1] << ' ' << UserData.codedPassword[2] << '\n'
+   << "Home Address: " + UserData.Adress << '\n'
+   << "Phone number: " << UserData.PhoneNum << '\n'
+   << "Income Per Year: " << UserData.IncomePerYear << '\n'
+   << "Age: " << UserData.age << '\n'
+   << "Savings account: " << (UserData.SA ? "true" : "false") << '\n'
+   << "Underaged Savings Account: " << (UserData.USA ? "true" : "false") << '\n'
+   << "Business Account: " << (UserData.BA ? "true" : "false") << '\n'
+   << "Normal Bank Account: " << (UserData.NBA ? "true" : "false") << '\n';
     b1.close();
     system("clear");
 }
