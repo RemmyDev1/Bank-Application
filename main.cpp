@@ -5,13 +5,15 @@
 #define MAX 100
 #include<stdio.h>
 #include<stdlib.h>
-
+#include"Connecter.h"
 
 using namespace std;
 
+struct UsersData UserData;
+
 void MainApplication()
 {
-    cout << "Your Are In!" << endl;
+    App();
 }
 
 set<int> prime;
@@ -129,79 +131,6 @@ istream& skipLine(istream &in) {
     return in.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-
-struct UsersData
-{
-
-    float IRMSA = 0.16f;
-    float IRMSSA = 0.08f;
-    float IRPSA = 0.05f;
-    float IRPSSA = 0.02f;
-    string Username = "";
-    string Password = "";
-    vector<int> codedPassword;
-    string Fname = "";
-    string Lname = "";
-    string SSN = "0";
-    vector<int> codedSSN;
-
-    //SA = Savigs account!
-    bool SA = false;
-    // AU = Underadged account!
-    bool UA = false;
-    //Savings And Underadged account
-    bool SUA = false;
-    // Business account?
-    bool BA = false;
-
-    int PhoneNum = 0;
-    int Money = 0;
-    string Adress = "";
-    int IncomePerYear = 0;
-
-
-    int LWP = 0;
-    int LMP = 0;
-    int LYP = 0;
-    int ATP = 0;
-    int ASLW = 0;
-    int ASLM = 0;
-    int ASLY = 0;
-
-    bool IsMinority = false;
-    bool IsPriority = false;
-
-
-    // Has a credit card?
-    bool HCC = false;
-    // Always starts a 650
-    int CCS = 650;
-    // This is always the starter (CCL) Credit Card Limit after income is determined 
-    // And calculated if payment history exists (CCL) Credt Card Limit will change
-    int CCL = 500;
-    int ACCLS = 0;
-    // Has Cash Back Card
-    bool HCBC = false;
-    float NCBCA = 0.03f;
-    // Has Debit card?
-    bool HDC = false;
-    // Money In Debit Card
-    int MIDC = 0;
-
-    int debt = 0;
-    // Monthly statment txt file should be sent via email or postal code.
-    // Loan history and Payment history will be created when I get a pc currently working on a chrome book.
-    //I cannot make  that hass to access files like txt.
-    // Previous Amount of Loans given to Client 
-    int PAL = 0;
-    // Has Money due
-    bool HMD = false;
-    // Due Date to pay money;
-    int DDTPM = 0;
-
-}UserData;
-
-
 void LoginToAccount()
 {
     string LoginPassword;
@@ -267,21 +196,81 @@ void CreateUserAccount()
     UserData.codedPassword = encrypt(UserData.Password);
     UserData.Password = "";
 
-    cout << "Please Enter Your Current Adress: " << endl;
+    cout << "Please Enter Your Current Adress (For spaces yous dashes): " << endl;
     cin >> UserData.Adress;
 
-    cout << "Please Enter Your SSN" << endl;
+    cout << "Please Enter Your SSN: " << endl;
     cin >> UserData.SSN;
 
     UserData.codedSSN = encrypt(UserData.SSN);
     cout << UserData.codedSSN << endl;
     UserData.SSN = "";
-                
+    
+    cout << "Please Enter Your Phone Number: " << endl;
+    cin >> UserData.PhoneNum;
+    
+    cout << "Please Enter Your Income Per Year (dont use comma's): " << endl;
+    cin >> UserData.IncomePerYear;
+    
+    if(UserData.IncomePerYear >= 350000)
+    {
+        UserData.IsMinority = true;
+    }
+    else
+    {
+        UserData.IsPriority = true;
+    }
+    
+    cout << "Please Enter Age: " << endl;
+    cin >> UserData.age;
+    if (UserData.age < 18)
+    {
+        UserData.UA = true;
+    }
+    
+    cout << "Do you want this account to be a savings accout? (true or false): " << endl;
+    cin >> UserData.SA;
+    if(UserData.age < 18 && UserData.SA == true)
+    {
+        UserData.USA = true;
+        UserData.UA = false;
+        UserData.SA = false;
+    }
+    
+    cout << "Do you want this to be a Business Account (true or false): " << endl;
+    cin >> UserData.BA;
+    
+    cout << "Do you want this to be a Normal Bank Account (true or false): " << endl;
+    cin >> UserData.NBA;
+    
+    if(UserData.SA == true && UserData.IsMinority == true)
+    {
+        UserData.CIRFA = UserData.IRMSA;
+    }
+    else if(UserData.USA == true && UserData.IsMinority == true)
+    {
+        UserData.CIRFA = UserData.IRMSSA;
+    }
+    else if(UserData.SA == true && UserData.IsPriority == true)
+    {
+        UserData.CIRFA == UserData.IRPSA;
+    }
+    else if(UserData.USA == true && UserData.IsPriority == true)
+    {
+        UserData.CIRFA == UserData.IRPSSA;
+    }
+    
     ofstream b1("BankUsersFiles.txt", ios::app);
     b1 << UserData.Username << '\n'
        << UserData.codedPassword << '\n'
-       << UserData.Adress << '\n'
-       << UserData.codedSSN << '\n';
+       << "Home Adress: " + UserData.Adress << '\n'
+       << "Phone number: " + UserData.PhoneNum << '\n'
+       << "Income Per Year: " + UserData.IncomePerYear << '\n'
+       << "age: " + UserData.age << '\n'
+       << "Savings account: " + UserData.SA << '\n'
+       << "Underadged Savings Account: " + UserData.USA << '\n'
+       << "Business Account: " + UserData.BA << '\n'
+       << "Normal Bank Account: " + UserData.NBA << '\n';
     b1.close();
     system("clear");
 }
@@ -321,6 +310,3 @@ int main()
     loadKeys();
     Menu();
 }
-
-
-
