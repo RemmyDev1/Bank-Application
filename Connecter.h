@@ -12,6 +12,7 @@ struct UsersData
     float IRMSSA = 0.08f;
     float IRPSA = 0.05f;
     float IRPSSA = 0.02f;
+    float CIRFA = 0.00f;
     string Username = "";
     string Password = "";
     vector<int> codedPassword;
@@ -25,15 +26,16 @@ struct UsersData
     // AU = Underadged account!
     bool UA = false;
     //Savings And Underadged account
-    bool SUA = false;
+    bool USA = false;
     // Business account?
     bool BA = false;
-
-    int PhoneNum = 0;
+    // Normal Bank Accont?
+    bool NBA = false;
+    string PhoneNum = "";
     int Money = 0;
     string Adress = "";
     int IncomePerYear = 0;
-
+    int age = 0;
 
     int LWP = 0;
     int LMP = 0;
