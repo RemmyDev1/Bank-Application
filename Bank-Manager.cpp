@@ -216,35 +216,23 @@ void LoginToAccount()
     cin >> LoginPassword;
 
     vector<int> LoginCodedPassword = encrypt(LoginPassword);
-    cout << LoginCodedPassword << endl;
-    
+
     ifstream b2("BankUsersFiles.txt"); 
 
-    string userDataUsername;
-    string userDataCodedPasswordLine;
-    while (getline(b2, userDataUsername) && getline(b2, userDataCodedPasswordLine)) {
-        if (userDataUsername == LoginUsername) {
-            vector<int> userDataCodedPassword;
-            istringstream passwordStream(userDataCodedPasswordLine);
-            int num;
-            while (passwordStream >> num) {
-                userDataCodedPassword.push_back(num);
-            }
-
-            // Check if the passwords match
-            if (userDataCodedPassword == LoginCodedPassword) {
-                MainApplication();
-                return;
-            } else {
-                cout << "Incorrect Password" << endl;
-                return; // Exit the function if the password is incorrect
-            }
-        }
+    cout << UserData.codedPassword << endl;
+    if ((LoginUsername == UserData.Username) &&
+        (LoginCodedPassword == UserData.codedPassword))
+    {
+        MainApplication();
+        return;
     }
 
-    // If the username is not found
-    cout << "Username not found" << endl;
-    b2.close();
+    skipLine(b2); // the rest of the password line
+    skipLine(b2); // the address line
+    skipLine(b2); // the ssn line
+    
+
+    cout << "Incorrect Login" << endl;
 }
 
 void CreateUserAccount()
@@ -268,10 +256,11 @@ void CreateUserAccount()
 
     UserData.codedPassword = encrypt(UserData.Password);
     UserData.Password = "";
-    cout << "Please Enter Your Current Adress (For Any Spaces Use A Dash): " << endl;
+
+    cout << "Please Enter Your Current Adress: " << endl;
     cin >> UserData.Adress;
 
-    cout << "Please Enter Your SSN: " << endl;
+    cout << "Please Enter Your SSN" << endl;
     cin >> UserData.SSN;
 
     UserData.codedSSN = encrypt(UserData.SSN);
@@ -322,6 +311,3 @@ int main()
     loadKeys();
     Menu();
 }
-
-
-
