@@ -126,8 +126,7 @@ istream& skipLine(istream &in) {
     return in.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-void LoginToAccount() 
-{
+void LoginToAccount() {
     string LoginPassword;
     string LoginUsername;
 
@@ -143,21 +142,16 @@ void LoginToAccount()
 
     ifstream b2("BankUsersFiles.txt");
 
-    string line;
+    string userDataUsername;
+    string userDataCodedPasswordLine;
     bool usernameFound = false;
 
-    while (getline(b2, line)) {
-        if (line == LoginUsername) {
+    while (getline(b2, userDataUsername) || usernameFound == false) {
+        if (userDataUsername == LoginUsername) {
+            getline(b2, userDataCodedPasswordLine);
             usernameFound = true;
-
-            // Read the password line
-            if (!getline(b2, line)) {
-                cout << "Invalid file format." << endl;
-                return;
-            }
-
             vector<int> userDataCodedPassword;
-            istringstream passwordStream(line);
+            istringstream passwordStream(userDataCodedPasswordLine);
             int num;
             while (passwordStream >> num) {
                 userDataCodedPassword.push_back(num);
@@ -166,16 +160,12 @@ void LoginToAccount()
             // Check if the passwords match
             if (userDataCodedPassword == LoginCodedPassword) 
             {
-                App(line);
+                App(userDataUsername);
                 return;
             } else {
                 cout << "Incorrect Password" << endl;
-                return;
+                return; // Exit the function if the password is incorrect
             }
-        }else
-        {
-            // Skip the rest of the user data
-            while (getline(b2, line) && !line.empty()) {}
         }
     }
 
@@ -184,7 +174,6 @@ void LoginToAccount()
         cout << "Username not found" << endl;
     }
 }
-
 
 void CreateUserAccount()
 {
