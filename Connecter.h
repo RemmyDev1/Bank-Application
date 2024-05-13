@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void App();
+void App(string Username);
 
 struct UsersData
 {
@@ -20,6 +20,7 @@ struct UsersData
     string Lname = "";
     string SSN = "0";
     vector<int> codedSSN;
+    string IntialDep = "";
 
     //SA = Savigs account!
     bool SA = false;
@@ -32,7 +33,7 @@ struct UsersData
     // Normal Bank Accont?
     bool NBA = false;
     string PhoneNum = "";
-    int Money = 0;
+    string Money = "0";
     string Adress = "";
     int IncomePerYear = 0;
     int age = 0;
@@ -71,10 +72,12 @@ struct UsersData
     //I cannot make  that hass to access files like txt.
     // Previous Amount of Loans given to Client 
     int PAL = 0;
-    // Has Money due
+    // Has Money due;
     bool HMD = false;
     // Due Date to pay money;
     int DDTPM = 0;
+    // Money In Savings Account;
+    int MISA = 0;
 
 };
 
