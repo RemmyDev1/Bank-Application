@@ -11,11 +11,6 @@ using namespace std;
 
 struct UsersData UserData;
 
-void MainApplication()
-{
-    App();
-}
-
 set<int> prime;
 int public_key;
 int private_key;
@@ -131,11 +126,11 @@ istream& skipLine(istream &in) {
     return in.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-void LoginToAccount()
+void LoginToAccount() 
 {
     string LoginPassword;
     string LoginUsername;
-       
+
     cout << "LOGIN" << endl;
 
     cout << "Please Enter Your Username" << endl;
@@ -143,36 +138,53 @@ void LoginToAccount()
 
     cout << "Please Enter Your Password" << endl;
     cin >> LoginPassword;
-    
-    vector<int> LoginCodedPassword = encrypt(LoginPassword);
-    cout << LoginCodedPassword << endl;
-    ifstream b2("BankUsersFiles.txt"); 
 
-    string userDataUsername;
-    string userDataCodedPasswordLine;
-    while (getline(b2, userDataUsername) && getline(b2, userDataCodedPasswordLine)) {
-        if (userDataUsername == LoginUsername) {
+    vector<int> LoginCodedPassword = encrypt(LoginPassword);
+
+    ifstream b2("BankUsersFiles.txt");
+
+    string line;
+    bool usernameFound = false;
+
+    while (getline(b2, line)) {
+        if (line == LoginUsername) {
+            usernameFound = true;
+
+            // Read the password line
+            if (!getline(b2, line)) {
+                cout << "Invalid file format." << endl;
+                return;
+            }
+
             vector<int> userDataCodedPassword;
-            istringstream passwordStream(userDataCodedPasswordLine);
+            istringstream passwordStream(line);
             int num;
             while (passwordStream >> num) {
                 userDataCodedPassword.push_back(num);
             }
 
             // Check if the passwords match
-            if (userDataCodedPassword == LoginCodedPassword) {
-                MainApplication();
+            if (userDataCodedPassword == LoginCodedPassword) 
+            {
+                App(line);
                 return;
             } else {
                 cout << "Incorrect Password" << endl;
-                return; // Exit the function if the password is incorrect
+                return;
             }
+        }else
+        {
+            // Skip the rest of the user data
+            while (getline(b2, line) && !line.empty()) {}
         }
     }
 
-    // If the username is not found
-    cout << "Username not found" << endl;
+    // Check if the username was not found
+    if (!usernameFound) {
+        cout << "Username not found" << endl;
+    }
 }
+
 
 void CreateUserAccount()
 {
@@ -242,6 +254,10 @@ void CreateUserAccount()
     cout << "Do you want this to be a Normal Bank Account (0 for true or 1 for false): " << endl;
     cin >> UserData.NBA;
     
+    cout << "Intial Deposit of how much money? " << endl;
+    cin >> UserData.IntialDep;
+    UserData.Money = UserData.IntialDep;
+    
     if(UserData.SA == true && UserData.IsMinority == true)
     {
         UserData.CIRFA = UserData.IRMSA;
@@ -259,19 +275,21 @@ void CreateUserAccount()
         UserData.CIRFA == UserData.IRPSSA;
     }
     
-    ofstream b1("BankUsersFiles.txt", ios::app);
-    b1 << UserData.Username << '\n'
-   << UserData.codedPassword[0] << ' ' << UserData.codedPassword[1] << ' ' << UserData.codedPassword[2] << '\n'
-   << "Home Address: " + UserData.Adress << '\n'
-   << "Phone number: " << UserData.PhoneNum << '\n'
-   << "Income Per Year: " << UserData.IncomePerYear << '\n'
-   << "Age: " << UserData.age << '\n'
-   << "Savings account: " << (UserData.SA ? "true" : "false") << '\n'
-   << "Underaged Savings Account: " << (UserData.USA ? "true" : "false") << '\n'
-   << "Business Account: " << (UserData.BA ? "true" : "false") << '\n'
-   << "Normal Bank Account: " << (UserData.NBA ? "true" : "false") << '\n';
-    b1.close();
-    system("clear");
+        ofstream b1("BankUsersFiles.txt", ios::app);
+        b1 << UserData.Username << '\n'
+       << UserData.codedPassword << '\n'
+       << UserData.codedSSN << '\n'
+       << "Money In Bank Account: " + UserData.Money << '\n'    
+       << "Home Address: " + UserData.Adress << '\n'
+       << "Phone number: " << UserData.PhoneNum << '\n'
+       << "Income Per Year: " << UserData.IncomePerYear << '\n'
+       << "Age: " << UserData.age << '\n'
+       << "Savings account: " << (UserData.SA ? "true" : "false") << '\n'
+       << "Underaged Savings Account: " << (UserData.USA ? "true" : "false") << '\n'
+       << "Business Account: " << (UserData.BA ? "true" : "false") << '\n'
+       << "Normal Bank Account: " << (UserData.NBA ? "true" : "false") << '\n';
+        b1.close();
+        system("clear");
 }
 
 void Menu()
